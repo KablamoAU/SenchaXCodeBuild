@@ -1,0 +1,67 @@
+#!/bin/bash
+set -e 
+
+if [ ! $# == 2 ]; then
+echo "Usage: $0 (path/to/project/www) $1 (X.X.X)"
+exit
+fi
+
+FP=$1
+VER=$2
+RF1='app-all.js'
+RF2='sencha-touch.js'
+DF1='sdk\/microloader\/development.js'
+DF2='sdk\/sencha-touch.js'
+IFILE=$FP/index.html
+TFILE=$FP/index.html.tmp
+
+echo 'creating deployable branch: RelV$VER...';
+git branch RelV$VER;
+echo 'checking out branch: RelV4VER...';
+git checkout RelV$VER
+
+echo 'running sencha build...';
+sencha create jsb -a $IFILE -p app.jsb3;
+sencha build -p $FP/app.jsb3 -d $FP/;
+
+echo 'removing unused built files...';
+rm -R $FP/all-classes.js;
+rm -R $FP/app.js;
+rm -R $FP/app.jsb3;
+rm -R $FP/app.json;
+rm -R $FP/build;
+rm -R $FP/packager.json;
+rm -R $FP/sencha-touch-all.js;
+
+echo 'removing unused folders...';
+rm -R $FP/app;
+rm -R $FP/Resources/sass;
+rm -R $FP/Resources/startup;
+rm -R $FP/Resources/icons;
+rm -R $FP/Resources/loading;
+rm -R $FP/sdk;
+
+echo 'modifying index.html...';
+sed "s/$DF1/$RF1/g" $IFILE > $TFILE;
+cp -f $TFILE $IFILE;
+sed "s/$DF2/$RF2/g" $IFILE > $TFILE;
+cp -f $TFILE $IFILE;
+
+rm $TFILE;
+
+echo "$FP is ready for release...";
+
+echo "deploying RelV$VER to github...";
+echo "adding changes to changeset...";
+git add -A
+echo "committing changeset to local repo...";
+git commit -m "Deloyable RelV$VER"
+echo "pushing to hosted git server...";
+git push origin RelV$VER
+echo "moving back to master branch...";
+git checkout master
+
+echo "Done!";
+
+
+
