@@ -1,4 +1,4 @@
-SenchaXCodeBuild
+Sencha - Phonegap - XCode - Build & Deploy Script
 ================
 
 Build script for Sencha 2.1 with XCode 
