@@ -36,9 +36,6 @@ rm -R $FP/sencha-touch-all.js;
 echo 'removing unused folders...';
 rm -R $FP/app;
 rm -R $FP/Resources/sass;
-rm -R $FP/Resources/startup;
-rm -R $FP/Resources/icons;
-rm -R $FP/Resources/loading;
 rm -R $FP/sdk;
 
 echo 'modifying index.html...';
