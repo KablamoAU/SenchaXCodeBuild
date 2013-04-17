@@ -6,6 +6,8 @@ echo "Usage: $0 (path/to/project/www) $1 (X.X.X)"
 exit
 fi
 
+git pull origin master
+
 FP=$1
 VER=$2
 RF1='app-all.js'
